@@ -3,9 +3,10 @@ import { db } from "@/lib/db"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  props: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const params = await props.params;
     const news = await db.news.findUnique({
       where: { 
         slug: params.slug,

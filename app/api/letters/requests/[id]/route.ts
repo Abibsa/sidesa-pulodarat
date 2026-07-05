@@ -4,9 +4,10 @@ import { LetterStatus } from "@prisma/client"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await props.params;
     const letterRequest = await db.letterRequest.findUnique({
       where: { id: params.id },
       include: { letterType: true },
@@ -31,9 +32,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await props.params;
     const body = await request.json()
     const { status, adminNotes, processedBy } = body
 
