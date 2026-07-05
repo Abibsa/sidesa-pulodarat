@@ -1,0 +1,185 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // url di-handle oleh prisma.config.ts untuk Prisma 7
+}
+
+enum UserRole {
+  SUPERADMIN
+  OPERATOR
+  KEPALA_DESA
+}
+
+enum Gender {
+  LAKI_LAKI
+  PEREMPUAN
+}
+
+enum MaritalStatus {
+  BELUM_KAWIN
+  KAWIN
+  CERAI_HIDUP
+  CERAI_MATI
+}
+
+enum LetterStatus {
+  DIAJUKAN
+  DIPROSES
+  SELESAI
+  DITOLAK
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      UserRole @default(OPERATOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Resident {
+  id              String        @id @default(cuid())
+  nik             String        @unique
+  kk              String
+  name            String
+  gender          Gender
+  birthDate       DateTime
+  birthPlace      String
+  address         String
+  rt              String
+  rw              String
+  kelurahan       String        @default("Desa")
+  kecamatan       String        @default("Kecamatan")
+  religion        String
+  maritalStatus   MaritalStatus
+  occupation      String
+  education       String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model LetterType {
+  id            String          @id @default(cuid())
+  name          String          @unique
+  code          String          @unique
+  description   String?
+  formFields    Json            // JSON schema untuk field dinamis
+  templatePath  String?         // Path ke template surat
+  isActive      Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  letterRequests LetterRequest[]
+}
+
+model LetterRequest {
+  id              String       @id @default(cuid())
+  ticketNumber    String       @unique
+  letterTypeId    String
+  letterType      LetterType   @relation(fields: [letterTypeId], references: [id])
+  
+  // Data pemohon
+  applicantNik    String
+  applicantName   String
+  applicantPhone  String?
+  applicantEmail  String?
+  
+  // Data form dinamis + lampiran
+  formData        Json         // Data sesuai formFields dari LetterType
+  attachments     Json?        // Array URL file lampiran
+  
+  // Status & processing
+  status          LetterStatus @default(DIAJUKAN)
+  adminNotes      String?
+  processedBy     String?      // User ID yang memproses
+  processedAt     DateTime?
+  completedAt     DateTime?
+  
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([ticketNumber])
+  @@index([applicantNik])
+  @@index([status])
+}
+
+model News {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String   @db.Text
+  excerpt     String?
+  category    String   @default("Umum")
+  coverImage  String?
+  author      String   @default("Admin Desa")
+  isPublished Boolean  @default(true)
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+}
+
+model VillageProfile {
+  id              String   @id @default(cuid())
+  villageName     String   @default("Desa")
+  kecamatan       String   @default("Kecamatan")
+  kabupaten       String   @default("Kabupaten")
+  provinsi        String   @default("Provinsi")
+  
+  // Profil
+  history         String?  @db.Text
+  vision          String?  @db.Text
+  mission         String?  @db.Text
+  
+  // Kontak
+  address         String?
+  phone           String?
+  email           String?
+  officeHours     String?  @default("Senin - Jumat, 08:00 - 15:00")
+  mapEmbedUrl     String?  @db.Text
+  
+  // Hero section
+  heroTitle       String?  @default("Selamat Datang di Website Desa")
+  heroSubtitle    String?  @db.Text
+  heroImage       String?
+  
+  // Sambutan Kepala Desa
+  chiefGreeting   String?  @db.Text
+  chiefName       String?  @default("Kepala Desa")
+  chiefPhoto      String?
+  
+  updatedAt       DateTime @updatedAt
+}
+
+model VillageOfficer {
+  id          String   @id @default(cuid())
+  name        String
+  position    String   // Kepala Desa, Sekretaris Desa, Kaur, dll
+  photo       String?
+  order       Int      @default(0) // Untuk urutan tampilan
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([order])
+}
+
+model VillagePotential {
+  id          String   @id @default(cuid())
+  title       String
+  category    String   // UMKM, Pertanian, Pariwisata, dll
+  description String   @db.Text
+  images      Json?    // Array URL gambar
+  contactInfo String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

@@ -1,0 +1,399 @@
+import { PrismaClient, UserRole, Gender, MaritalStatus } from '@prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
+import { Pool } from 'pg'
+import { hash } from 'bcryptjs'
+
+// Prisma 7 requires adapter for direct database connections
+const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+const adapter = new PrismaPg(pool)
+const prisma = new PrismaClient({ adapter })
+
+async function main() {
+  console.log('🌱 Mulai seeding database...')
+
+  // 1. Create Users
+  console.log('👤 Membuat user admin...')
+  const hashedPassword = await hash('admin123', 10)
+  
+  const superadmin = await prisma.user.upsert({
+    where: { email: 'superadmin@desa.id' },
+    update: {},
+    create: {
+      email: 'superadmin@desa.id',
+      name: 'Super Admin',
+      password: hashedPassword,
+      role: UserRole.SUPERADMIN
+    }
+  })
+
+  const operator = await prisma.user.upsert({
+    where: { email: 'operator@desa.id' },
+    update: {},
+    create: {
+      email: 'operator@desa.id',
+      name: 'Operator Desa',
+      password: hashedPassword,
+      role: UserRole.OPERATOR
+    }
+  })
+
+  const kepalaDesa = await prisma.user.upsert({
+    where: { email: 'kepala@desa.id' },
+    update: {},
+    create: {
+      email: 'kepala@desa.id',
+      name: 'Kepala Desa',
+      password: hashedPassword,
+      role: UserRole.KEPALA_DESA
+    }
+  })
+
+  console.log('✅ User berhasil dibuat')
+
+  // 2. Create Village Profile
+  console.log('🏘️  Membuat profil desa...')
+  await prisma.villageProfile.upsert({
+    where: { id: 'default' },
+    update: {},
+    create: {
+      id: 'default',
+      villageName: 'Desa PULODARAT',
+      kecamatan: 'Kecamatan Sentral',
+      kabupaten: 'Kabupaten Contoh',
+      provinsi: 'Provinsi Contoh',
+      history: 'Desa PULODARAT didirikan pada tahun 1950 dan telah berkembang menjadi desa yang maju dengan berbagai potensi lokal.',
+      vision: 'Menjadi desa mandiri, sejahtera, dan berbudaya pada tahun 2030.',
+      mission: '1. Meningkatkan kesejahteraan masyarakat\n2. Mengembangkan potensi lokal\n3. Memperkuat tata kelola pemerintahan desa',
+      address: 'Jl. Raya Desa No. 1, Desa PULODARAT',
+      phone: '0271-123456',
+      email: 'info@desapulodarat.id',
+      heroTitle: 'Selamat Datang di Desa PULODARAT',
+      heroSubtitle: 'Desa yang maju, sejahtera, dan berbudaya',
+      chiefName: 'H. Ahmad Dahlan, S.Sos',
+      chiefGreeting: 'Assalamu\'alaikum warahmatullahi wabarakatuh. Selamat datang di website resmi Desa PULODARAT. Kami berkomitmen untuk memberikan pelayanan terbaik kepada seluruh masyarakat.'
+    }
+  })
+
+  console.log('✅ Profil desa berhasil dibuat')
+
+  // 3. Create Village Officers
+  console.log('👥 Membuat struktur organisasi...')
+  await prisma.villageOfficer.createMany({
+    data: [
+      { name: 'H. Ahmad Dahlan, S.Sos', position: 'Kepala Desa', order: 1 },
+      { name: 'Budi Santoso, S.AP', position: 'Sekretaris Desa', order: 2 },
+      { name: 'Siti Aminah, S.E', position: 'Kaur Keuangan', order: 3 },
+      { name: 'Joko Widodo', position: 'Kaur Umum', order: 4 },
+      { name: 'Rina Marlina', position: 'Kasi Pemerintahan', order: 5 }
+    ],
+    skipDuplicates: true
+  })
+
+  console.log('✅ Struktur organisasi berhasil dibuat')
+
+  // 4. Create Residents
+  console.log('🧑‍🤝‍🧑 Membuat data penduduk...')
+  await prisma.resident.createMany({
+    data: [
+      {
+        nik: '3301010101900001',
+        kk: '3301011234567890',
+        name: 'Ahmad Rizki',
+        gender: Gender.LAKI_LAKI,
+        birthDate: new Date('1990-01-01'),
+        birthPlace: 'Jakarta',
+        address: 'Jl. Mawar No. 1',
+        rt: '001',
+        rw: '001',
+        kelurahan: 'Desa PULODARAT',
+        kecamatan: 'Kecamatan Sentral',
+        religion: 'Islam',
+        maritalStatus: MaritalStatus.KAWIN,
+        occupation: 'Wiraswasta',
+        education: 'SMA/Sederajat'
+      },
+      {
+        nik: '3301010202850002',
+        kk: '3301011234567890',
+        name: 'Siti Nurhaliza',
+        gender: Gender.PEREMPUAN,
+        birthDate: new Date('1985-02-02'),
+        birthPlace: 'Bandung',
+        address: 'Jl. Mawar No. 1',
+        rt: '001',
+        rw: '001',
+        kelurahan: 'Desa PULODARAT',
+        kecamatan: 'Kecamatan Sentral',
+        religion: 'Islam',
+        maritalStatus: MaritalStatus.KAWIN,
+        occupation: 'Ibu Rumah Tangga',
+        education: 'SMA/Sederajat'
+      },
+      {
+        nik: '3301010303950003',
+        kk: '3301012345678901',
+        name: 'Budi Santoso',
+        gender: Gender.LAKI_LAKI,
+        birthDate: new Date('1995-03-03'),
+        birthPlace: 'Semarang',
+        address: 'Jl. Melati No. 5',
+        rt: '002',
+        rw: '001',
+        kelurahan: 'Desa PULODARAT',
+        kecamatan: 'Kecamatan Sentral',
+        religion: 'Kristen',
+        maritalStatus: MaritalStatus.BELUM_KAWIN,
+        occupation: 'Karyawan Swasta',
+        education: 'S1'
+      },
+      {
+        nik: '3301010404920004',
+        kk: '3301012345678902',
+        name: 'Dewi Lestari',
+        gender: Gender.PEREMPUAN,
+        birthDate: new Date('1992-04-04'),
+        birthPlace: 'Yogyakarta',
+        address: 'Jl. Anggrek No. 10',
+        rt: '003',
+        rw: '002',
+        kelurahan: 'Desa PULODARAT',
+        kecamatan: 'Kecamatan Sentral',
+        religion: 'Islam',
+        maritalStatus: MaritalStatus.KAWIN,
+        occupation: 'Guru',
+        education: 'S1'
+      },
+      {
+        nik: '3301010505880005',
+        kk: '3301012345678903',
+        name: 'Eko Prasetyo',
+        gender: Gender.LAKI_LAKI,
+        birthDate: new Date('1988-05-05'),
+        birthPlace: 'Surabaya',
+        address: 'Jl. Dahlia No. 15',
+        rt: '001',
+        rw: '002',
+        kelurahan: 'Desa PULODARAT',
+        kecamatan: 'Kecamatan Sentral',
+        religion: 'Islam',
+        maritalStatus: MaritalStatus.KAWIN,
+        occupation: 'Petani',
+        education: 'SMP/Sederajat'
+      },
+      {
+        nik: '3301010606870006',
+        kk: '3301012345678904',
+        name: 'Fitri Handayani',
+        gender: Gender.PEREMPUAN,
+        birthDate: new Date('1987-06-06'),
+        birthPlace: 'Malang',
+        address: 'Jl. Kenanga No. 20',
+        rt: '002',
+        rw: '002',
+        kelurahan: 'Desa PULODARAT',
+        kecamatan: 'Kecamatan Sentral',
+        religion: 'Islam',
+        maritalStatus: MaritalStatus.CERAI_HIDUP,
+        occupation: 'Pedagang',
+        education: 'SMA/Sederajat'
+      },
+      {
+        nik: '3301010707000007',
+        kk: '3301012345678905',
+        name: 'Gilang Ramadhan',
+        gender: Gender.LAKI_LAKI,
+        birthDate: new Date('2000-07-07'),
+        birthPlace: 'Solo',
+        address: 'Jl. Tulip No. 25',
+        rt: '003',
+        rw: '003',
+        kelurahan: 'Desa PULODARAT',
+        kecamatan: 'Kecamatan Sentral',
+        religion: 'Islam',
+        maritalStatus: MaritalStatus.BELUM_KAWIN,
+        occupation: 'Mahasiswa',
+        education: 'SMA/Sederajat'
+      },
+      {
+        nik: '3301010808980008',
+        kk: '3301012345678906',
+        name: 'Hani Kusuma',
+        gender: Gender.PEREMPUAN,
+        birthDate: new Date('1998-08-08'),
+        birthPlace: 'Medan',
+        address: 'Jl. Sakura No. 30',
+        rt: '001',
+        rw: '003',
+        kelurahan: 'Desa PULODARAT',
+        kecamatan: 'Kecamatan Sentral',
+        religion: 'Buddha',
+        maritalStatus: MaritalStatus.BELUM_KAWIN,
+        occupation: 'Desainer',
+        education: 'S1'
+      },
+      {
+        nik: '3301010909750009',
+        kk: '3301012345678907',
+        name: 'Imam Nugroho',
+        gender: Gender.LAKI_LAKI,
+        birthDate: new Date('1975-09-09'),
+        birthPlace: 'Palembang',
+        address: 'Jl. Cempaka No. 35',
+        rt: '002',
+        rw: '003',
+        kelurahan: 'Desa PULODARAT',
+        kecamatan: 'Kecamatan Sentral',
+        religion: 'Islam',
+        maritalStatus: MaritalStatus.KAWIN,
+        occupation: 'PNS',
+        education: 'S1'
+      },
+      {
+        nik: '3301011010960010',
+        kk: '3301012345678908',
+        name: 'Jihan Aulia',
+        gender: Gender.PEREMPUAN,
+        birthDate: new Date('1996-10-10'),
+        birthPlace: 'Makassar',
+        address: 'Jl. Bougenville No. 40',
+        rt: '003',
+        rw: '001',
+        kelurahan: 'Desa PULODARAT',
+        kecamatan: 'Kecamatan Sentral',
+        religion: 'Islam',
+        maritalStatus: MaritalStatus.BELUM_KAWIN,
+        occupation: 'Perawat',
+        education: 'D3'
+      }
+    ],
+    skipDuplicates: true
+  })
+
+  console.log('✅ Data penduduk berhasil dibuat')
+
+  // 5. Create Letter Types
+  console.log('📄 Membuat jenis surat...')
+  await prisma.letterType.createMany({
+    data: [
+      {
+        name: 'Surat Keterangan Domisili',
+        code: 'SKD',
+        description: 'Surat keterangan untuk menerangkan domisili seseorang',
+        formFields: JSON.stringify([
+          { name: 'alamat_lengkap', label: 'Alamat Lengkap', type: 'textarea', required: true },
+          { name: 'keperluan', label: 'Keperluan', type: 'text', required: true }
+        ])
+      },
+      {
+        name: 'Surat Keterangan Tidak Mampu',
+        code: 'SKTM',
+        description: 'Surat keterangan untuk menerangkan ketidakmampuan ekonomi',
+        formFields: JSON.stringify([
+          { name: 'penghasilan', label: 'Penghasilan per Bulan', type: 'text', required: true },
+          { name: 'tanggungan', label: 'Jumlah Tanggungan', type: 'number', required: true },
+          { name: 'keperluan', label: 'Keperluan', type: 'text', required: true }
+        ])
+      },
+      {
+        name: 'Surat Pengantar KTP/KK',
+        code: 'SP-KTP',
+        description: 'Surat pengantar untuk pembuatan KTP atau Kartu Keluarga',
+        formFields: JSON.stringify([
+          { name: 'jenis_permohonan', label: 'Jenis Permohonan', type: 'select', options: ['KTP Baru', 'KK Baru', 'Perubahan KTP', 'Perubahan KK'], required: true },
+          { name: 'alasan', label: 'Alasan', type: 'textarea', required: true }
+        ])
+      },
+      {
+        name: 'Surat Keterangan Usaha',
+        code: 'SKU',
+        description: 'Surat keterangan untuk menerangkan kepemilikan usaha',
+        formFields: JSON.stringify([
+          { name: 'nama_usaha', label: 'Nama Usaha', type: 'text', required: true },
+          { name: 'jenis_usaha', label: 'Jenis Usaha', type: 'text', required: true },
+          { name: 'alamat_usaha', label: 'Alamat Usaha', type: 'textarea', required: true },
+          { name: 'tahun_berdiri', label: 'Tahun Berdiri', type: 'number', required: true }
+        ])
+      }
+    ],
+    skipDuplicates: true
+  })
+
+  console.log('✅ Jenis surat berhasil dibuat')
+
+  // 6. Create News
+  console.log('📰 Membuat berita...')
+  await prisma.news.createMany({
+    data: [
+      {
+        title: 'Peluncuran Sistem Pelayanan Online Desa PULODARAT',
+        slug: 'peluncuran-sistem-pelayanan-online',
+        excerpt: 'Desa PULODARAT meluncurkan sistem pelayanan online untuk memudahkan warga dalam mengurus administrasi.',
+        content: 'Dalam rangka meningkatkan kualitas pelayanan kepada masyarakat, Pemerintah Desa PULODARAT meluncurkan sistem pelayanan online. Melalui sistem ini, warga dapat mengajukan berbagai jenis surat keterangan secara online tanpa perlu datang ke kantor desa.\n\nKepala Desa PULODARAT, H. Ahmad Dahlan, S.Sos menyampaikan bahwa sistem ini diharapkan dapat mempercepat proses pelayanan dan mengurangi antrian di kantor desa. "Dengan sistem online ini, warga bisa mengajukan surat dari rumah dan tinggal mengambil hasilnya di kantor desa," ujarnya.\n\nSistem ini dapat diakses melalui website resmi desa 24 jam sehari.',
+        category: 'Pengumuman',
+        author: 'Admin Desa'
+      },
+      {
+        title: 'Musyawarah Desa Pembahasan APBDes 2026',
+        slug: 'musyawarah-desa-apbdes-2026',
+        excerpt: 'Pemerintah Desa mengadakan musyawarah desa untuk membahas Anggaran Pendapatan dan Belanja Desa tahun 2026.',
+        content: 'Pemerintah Desa PULODARAT menggelar Musyawarah Desa (Musdes) untuk membahas Rancangan Anggaran Pendapatan dan Belanja Desa (APBDes) tahun anggaran 2026. Kegiatan ini dihadiri oleh perangkat desa, BPD, tokoh masyarakat, dan perwakilan dari berbagai unsur masyarakat.\n\nDalam musyawarah tersebut, dibahas berbagai program prioritas yang akan dilaksanakan di tahun 2026, termasuk pembangunan infrastruktur, pemberdayaan masyarakat, dan peningkatan layanan publik.\n\nKepala Desa menekankan pentingnya partisipasi masyarakat dalam perencanaan pembangunan desa untuk mewujudkan desa yang lebih maju dan sejahtera.',
+        category: 'Kegiatan',
+        author: 'Admin Desa'
+      },
+      {
+        title: 'Program KKN Universitas Bantu Digitalisasi Desa',
+        slug: 'program-kkn-digitalisasi-desa',
+        excerpt: 'Mahasiswa KKN dari universitas lokal membantu proses digitalisasi administrasi dan pelayanan desa.',
+        content: 'Desa PULODARAT kedatangan mahasiswa Kuliah Kerja Nyata (KKN) dari universitas setempat. Para mahasiswa ini membawa program digitalisasi administrasi dan pelayanan desa.\n\nSelama program KKN, mahasiswa memberikan pelatihan kepada perangkat desa tentang penggunaan sistem pelayanan online dan membantu migrasi data administrasi ke sistem digital.\n\n"Kami sangat terbantu dengan kehadiran mahasiswa KKN. Mereka tidak hanya membawa sistem, tapi juga melatih kami cara menggunakannya," ungkap salah satu perangkat desa.\n\nProgram ini diharapkan dapat meningkatkan efisiensi dan transparansi dalam pengelolaan administrasi desa.',
+        category: 'Kegiatan',
+        author: 'Admin Desa'
+      }
+    ],
+    skipDuplicates: true
+  })
+
+  console.log('✅ Berita berhasil dibuat')
+
+  // 7. Create Village Potentials
+  console.log('🌾 Membuat data potensi desa...')
+  await prisma.villagePotential.createMany({
+    data: [
+      {
+        title: 'UMKM Keripik Singkong Ibu Hj. Siti',
+        category: 'UMKM',
+        description: 'Usaha keripik singkong dengan berbagai varian rasa yang telah berproduksi sejak 2010. Produk ini telah dipasarkan hingga ke luar kota dan mendapat respon positif dari konsumen.',
+        contactInfo: 'WA: 0812-3456-7890'
+      },
+      {
+        title: 'Pertanian Padi Organik',
+        category: 'Pertanian',
+        description: 'Desa PULODARAT memiliki lahan pertanian padi organik seluas 50 hektar. Hasil panen rutin dilakukan 3 kali dalam setahun dengan kualitas beras premium.',
+        contactInfo: 'Kelompok Tani Maju Jaya'
+      },
+      {
+        title: 'Wisata Agro Kebun Strawberry',
+        category: 'Pariwisata',
+        description: 'Kebun strawberry yang dapat dikunjungi wisatawan untuk petik langsung. Lokasi sejuk dan pemandangan indah menjadi daya tarik utama.',
+        contactInfo: 'Buka Senin-Minggu, 08:00-17:00'
+      }
+    ],
+    skipDuplicates: true
+  })
+
+  console.log('✅ Potensi desa berhasil dibuat')
+
+  console.log('\n🎉 Seeding selesai!')
+  console.log('\n📝 Login credentials:')
+  console.log('   Superadmin: superadmin@desa.id / admin123')
+  console.log('   Operator: operator@desa.id / admin123')
+  console.log('   Kepala Desa: kepala@desa.id / admin123')
+}
+
+main()
+  .catch((e) => {
+    console.error('❌ Error saat seeding:', e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
