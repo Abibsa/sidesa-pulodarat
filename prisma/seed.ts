@@ -3,8 +3,7 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
 import { hash } from 'bcryptjs'
 
-// Prisma 7 requires adapter for direct database connections
-const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } })
 const adapter = new PrismaPg(pool)
 const prisma = new PrismaClient({ adapter })
 
@@ -57,20 +56,21 @@ async function main() {
     update: {},
     create: {
       id: 'default',
-      villageName: 'Desa PULODARAT',
-      kecamatan: 'Kecamatan Sentral',
-      kabupaten: 'Kabupaten Contoh',
-      provinsi: 'Provinsi Contoh',
-      history: 'Desa PULODARAT didirikan pada tahun 1950 dan telah berkembang menjadi desa yang maju dengan berbagai potensi lokal.',
-      vision: 'Menjadi desa mandiri, sejahtera, dan berbudaya pada tahun 2030.',
-      mission: '1. Meningkatkan kesejahteraan masyarakat\n2. Mengembangkan potensi lokal\n3. Memperkuat tata kelola pemerintahan desa',
-      address: 'Jl. Raya Desa No. 1, Desa PULODARAT',
-      phone: '0271-123456',
-      email: 'info@desapulodarat.id',
-      heroTitle: 'Selamat Datang di Desa PULODARAT',
-      heroSubtitle: 'Desa yang maju, sejahtera, dan berbudaya',
-      chiefName: 'H. Ahmad Dahlan, S.Sos',
-      chiefGreeting: 'Assalamu\'alaikum warahmatullahi wabarakatuh. Selamat datang di website resmi Desa PULODARAT. Kami berkomitmen untuk memberikan pelayanan terbaik kepada seluruh masyarakat.'
+      villageName: 'Desa Pulodarat',
+      kecamatan: 'Pecangaan',
+      kabupaten: 'Kabupaten Jepara',
+      provinsi: 'Jawa Tengah',
+      history: 'Desa Pulodarat adalah salah satu desa di Kecamatan Pecangaan yang masyarakatnya hidup rukun dengan memadukan tradisi budaya Jepara yang kental dan semangat gotong royong.',
+      vision: 'Terwujudnya Desa Pulodarat yang Mandiri, Sejahtera, dan Berbudaya melalui Tata Kelola Pemerintahan yang Baik.',
+      mission: '1. Meningkatkan kualitas pelayanan publik bagi masyarakat.\n2. Mengembangkan potensi ekonomi lokal, khususnya di sektor pertanian dan industri rumahan.\n3. Meningkatkan pembangunan infrastruktur desa yang merata.',
+      address: 'Kantor Petinggi Desa Pulodarat, Kec. Pecangaan, Kabupaten Jepara, Jawa Tengah, Kode Pos 59462',
+      phone: '[Nomor Petinggi/Admin]',
+      email: 'pemdes.pulodarat@jepara.go.id',
+      officeHours: 'Senin - Jumat, 08:00 - 15:00 WIB',
+      heroTitle: 'Selamat Datang di Desa Pulodarat',
+      heroSubtitle: 'Desa Mandiri, Sejahtera, dan Berbudaya',
+      chiefName: '[Nama Lengkap Petinggi Pulodarat]',
+      chiefGreeting: 'Assalamu\'alaikum warahmatullahi wabarakatuh. Selamat datang di website resmi Desa Pulodarat. Kami berkomitmen untuk memberikan pelayanan publik yang berkualitas demi kesejahteraan warga.'
     }
   })
 
@@ -80,11 +80,11 @@ async function main() {
   console.log('👥 Membuat struktur organisasi...')
   await prisma.villageOfficer.createMany({
     data: [
-      { name: 'H. Ahmad Dahlan, S.Sos', position: 'Kepala Desa', order: 1 },
-      { name: 'Budi Santoso, S.AP', position: 'Sekretaris Desa', order: 2 },
-      { name: 'Siti Aminah, S.E', position: 'Kaur Keuangan', order: 3 },
-      { name: 'Joko Widodo', position: 'Kaur Umum', order: 4 },
-      { name: 'Rina Marlina', position: 'Kasi Pemerintahan', order: 5 }
+      { name: '[Nama Lengkap Petinggi Pulodarat]', position: 'Kepala Desa (Petinggi)', order: 1 },
+      { name: '[Nama Lengkap Carik]', position: 'Sekretaris Desa (Carik)', order: 2 },
+      { name: '[Nama Kaur Keuangan]', position: 'Kaur Keuangan', order: 3 },
+      { name: '[Nama Kaur Umum]', position: 'Kaur Umum', order: 4 },
+      { name: '[Nama Kasi Pemerintahan]', position: 'Kasi Pemerintahan', order: 5 }
     ],
     skipDuplicates: true
   })
@@ -359,22 +359,22 @@ async function main() {
   await prisma.villagePotential.createMany({
     data: [
       {
-        title: 'UMKM Keripik Singkong Ibu Hj. Siti',
-        category: 'UMKM',
-        description: 'Usaha keripik singkong dengan berbagai varian rasa yang telah berproduksi sejak 2010. Produk ini telah dipasarkan hingga ke luar kota dan mendapat respon positif dari konsumen.',
-        contactInfo: 'WA: 0812-3456-7890'
-      },
-      {
-        title: 'Pertanian Padi Organik',
+        title: 'Sektor Pertanian Padi dan Palawija',
         category: 'Pertanian',
-        description: 'Desa PULODARAT memiliki lahan pertanian padi organik seluas 50 hektar. Hasil panen rutin dilakukan 3 kali dalam setahun dengan kualitas beras premium.',
-        contactInfo: 'Kelompok Tani Maju Jaya'
+        description: 'Sektor pertanian merupakan salah satu mata pencaharian pokok warga Desa Pulodarat, dengan komoditas unggulan berupa padi dan palawija yang menyokong ketahanan pangan desa.',
+        contactInfo: 'Kelompok Tani Desa Pulodarat'
       },
       {
-        title: 'Wisata Agro Kebun Strawberry',
-        category: 'Pariwisata',
-        description: 'Kebun strawberry yang dapat dikunjungi wisatawan untuk petik langsung. Lokasi sejuk dan pemandangan indah menjadi daya tarik utama.',
-        contactInfo: 'Buka Senin-Minggu, 08:00-17:00'
+        title: 'Industri Rumahan: Konveksi & Mebel',
+        category: 'UMKM',
+        description: 'Sesuai dengan ciri khas wilayah Jepara, sebagian masyarakat bergerak di bidang ukir kayu (mebel) dan industri konveksi (pakaian) rumahan dengan kualitas yang sangat kompetitif.',
+        contactInfo: 'Paguyuban Pengrajin Pulodarat'
+      },
+      {
+        title: 'Aneka UMKM Kuliner & Kerajinan Lokal',
+        category: 'UMKM',
+        description: 'Beragam aneka jajanan pasar dan kerajinan tangan rumahan yang terus tumbuh menjadi penggerak ekonomi skala kecil di wilayah Pulodarat.',
+        contactInfo: 'Pusat Oleh-Oleh Pulodarat'
       }
     ],
     skipDuplicates: true

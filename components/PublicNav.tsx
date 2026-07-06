@@ -1,41 +1,122 @@
+"use client"
+
+import { useState, useEffect } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Button } from "./ui/button"
+import { Menu, X, Moon, Sun } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { useTheme } from "next-themes"
 
 export default function PublicNav() {
+  const [isOpen, setIsOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const pathname = usePathname()
+  const { theme, setTheme } = useTheme()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const navLinks = [
+    { href: "/", label: "Beranda" },
+    { href: "/profil", label: "Profil Desa" },
+    { href: "/berita", label: "Berita" },
+    { href: "/potensi", label: "Potensi Desa" },
+    { href: "/kontak", label: "Kontak" },
+  ]
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark")
+  }
+
   return (
-    <nav className="bg-white border-b shadow-sm sticky top-0 z-50">
+    <nav className="bg-background/80 backdrop-blur-md border-b border-border shadow-sm sticky top-0 z-50 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          <Link href="/" className="font-bold text-xl text-blue-600">
+          <Link href="/" className="font-bold text-xl text-primary flex items-center gap-2">
             SIDESA
           </Link>
+
+          {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-6">
-            <Link href="/" className="text-gray-700 hover:text-blue-600">
-              Beranda
-            </Link>
-            <Link href="/profil" className="text-gray-700 hover:text-blue-600">
-              Profil Desa
-            </Link>
-            <Link href="/berita" className="text-gray-700 hover:text-blue-600">
-              Berita
-            </Link>
-            <Link href="/potensi" className="text-gray-700 hover:text-blue-600">
-              Potensi Desa
-            </Link>
-            <Link href="/kontak" className="text-gray-700 hover:text-blue-600">
-              Kontak
-            </Link>
+            {navLinks.map((link) => (
+              <Link 
+                key={link.href} 
+                href={link.href} 
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  pathname === link.href ? "text-primary" : "text-muted-foreground"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
-          <div className="flex items-center gap-2">
+
+          <div className="hidden md:flex items-center gap-3">
+            {mounted && (
+              <Button variant="ghost" size="icon" onClick={toggleTheme} className="mr-2">
+                {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </Button>
+            )}
             <Link href="/surat">
-              <Button>Ajukan Surat</Button>
+              <Button className="rounded-xl shadow-md hover:shadow-lg transition-shadow">Ajukan Surat</Button>
             </Link>
             <Link href="/cek-status">
-              <Button variant="outline">Cek Status</Button>
+              <Button variant="outline" className="rounded-xl">Cek Status</Button>
             </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center gap-2">
+            {mounted && (
+              <Button variant="ghost" size="icon" onClick={toggleTheme}>
+                {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </Button>
+            )}
+            <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)}>
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Nav */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-border bg-background overflow-hidden"
+          >
+            <div className="px-4 pt-2 pb-4 space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                    pathname === link.href 
+                      ? "bg-primary/10 text-primary" 
+                      : "text-foreground hover:bg-muted"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <div className="mt-4 pt-4 border-t border-border flex flex-col gap-3">
+                <Link href="/surat" onClick={() => setIsOpen(false)}>
+                  <Button className="w-full rounded-xl">Ajukan Surat</Button>
+                </Link>
+                <Link href="/cek-status" onClick={() => setIsOpen(false)}>
+                  <Button variant="outline" className="w-full rounded-xl">Cek Status</Button>
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   )
 }

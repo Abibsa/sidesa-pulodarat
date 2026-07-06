@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { formatDateTime } from "@/lib/utils"
-import { Search, CheckCircle, Clock, XCircle, FileText } from "lucide-react"
+import { Search, CheckCircle, Clock, XCircle, FileText, Loader2, ArrowRight } from "lucide-react"
 import Link from "next/link"
+import PublicNav from "@/components/PublicNav"
+import { motion, AnimatePresence } from "framer-motion"
 
 export default function CekStatusPage() {
   const [ticketNumber, setTicketNumber] = useState("")
@@ -47,213 +49,250 @@ export default function CekStatusPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "DIAJUKAN":
-        return <Clock className="w-6 h-6 text-blue-600" />
+        return <Clock className="w-8 h-8 text-blue-600 dark:text-blue-400" />
       case "DIPROSES":
-        return <FileText className="w-6 h-6 text-yellow-600" />
+        return <FileText className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
       case "SELESAI":
-        return <CheckCircle className="w-6 h-6 text-green-600" />
+        return <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
       case "DITOLAK":
-        return <XCircle className="w-6 h-6 text-red-600" />
+        return <XCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
       default:
-        return <Clock className="w-6 h-6 text-gray-600" />
+        return <Clock className="w-8 h-8 text-slate-600 dark:text-slate-400" />
     }
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "DIAJUKAN":
-        return "bg-blue-100 text-blue-800 border-blue-300"
+        return "bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300"
       case "DIPROSES":
-        return "bg-yellow-100 text-yellow-800 border-yellow-300"
+        return "bg-yellow-50 text-yellow-800 border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800 dark:text-yellow-300"
       case "SELESAI":
-        return "bg-green-100 text-green-800 border-green-300"
+        return "bg-green-50 text-green-800 border-green-200 dark:bg-green-900/20 dark:border-green-800 dark:text-green-300"
       case "DITOLAK":
-        return "bg-red-100 text-red-800 border-red-300"
+        return "bg-red-50 text-red-800 border-red-200 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300"
       default:
-        return "bg-gray-100 text-gray-800 border-gray-300"
+        return "bg-slate-50 text-slate-800 border-slate-200 dark:bg-slate-900/20 dark:border-slate-800 dark:text-slate-300"
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <nav className="bg-white border-b">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <Link href="/" className="font-bold text-xl">
-              SIDESA
-            </Link>
-            <div className="flex gap-4">
-              <Link href="/surat">
-                <Button variant="outline">Ajukan Surat</Button>
-              </Link>
-              <Link href="/login">
-                <Button variant="ghost">Login Admin</Button>
-              </Link>
-            </div>
-          </div>
+    <div className="min-h-screen bg-background flex flex-col">
+      <PublicNav />
+
+      {/* Page Header */}
+      <div className="bg-primary/5 py-12 border-b border-border">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Cek Status Pengajuan
+            </h1>
+            <p className="text-muted-foreground text-lg">
+              Lacak status pengajuan surat Anda menggunakan nomor tiket atau NIK
+            </p>
+          </motion.div>
         </div>
-      </nav>
+      </div>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Cek Status Pengajuan
-          </h1>
-          <p className="text-gray-600">
-            Lacak status pengajuan surat Anda menggunakan nomor tiket atau NIK
-          </p>
-        </div>
-
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Search className="w-5 h-5" />
-              Cari Pengajuan
-            </CardTitle>
-            <CardDescription>
-              Masukkan nomor tiket atau NIK untuk melacak status pengajuan
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSearch} className="space-y-4">
-              <div className="space-y-2">
-                <Label>Nomor Tiket</Label>
-                <Input
-                  value={ticketNumber}
-                  onChange={(e) => setTicketNumber(e.target.value)}
-                  placeholder="TKT-202601-XXXXXX"
-                />
-              </div>
-              <div className="text-center text-sm text-gray-600">atau</div>
-              <div className="space-y-2">
-                <Label>NIK</Label>
-                <Input
-                  value={nik}
-                  onChange={(e) => setNik(e.target.value)}
-                  placeholder="16 digit NIK"
-                  maxLength={16}
-                />
-              </div>
-              {error && (
-                <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
-                  {error}
-                </div>
-              )}
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Mencari..." : "Cari Pengajuan"}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-
-        {result && (
-          <Card>
+      <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+          <Card className="mb-8 shadow-md border-border">
             <CardHeader>
-              <div className="flex items-start justify-between">
-                <div>
-                  <CardTitle className="text-2xl mb-2">
-                    {result.letterType.name}
-                  </CardTitle>
-                  <CardDescription className="text-base">
-                    No. Tiket: <span className="font-mono font-semibold">{result.ticketNumber}</span>
-                  </CardDescription>
-                </div>
-                {getStatusIcon(result.status)}
-              </div>
+              <CardTitle className="flex items-center gap-2 text-xl">
+                <Search className="w-5 h-5 text-primary" />
+                Pencarian Dokumen
+              </CardTitle>
+              <CardDescription>
+                Masukkan salah satu data di bawah ini untuk melacak status pengajuan
+              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Status Timeline */}
-              <div
-                className={`p-4 rounded-lg border-2 ${getStatusColor(result.status)}`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-semibold text-lg">Status: {result.status}</p>
-                    <p className="text-sm opacity-80">
-                      {result.status === "DIAJUKAN" &&
-                        "Pengajuan Anda sedang menunggu diproses"}
-                      {result.status === "DIPROSES" &&
-                        "Pengajuan Anda sedang diproses oleh petugas"}
-                      {result.status === "SELESAI" &&
-                        "Pengajuan Anda telah selesai diproses"}
-                      {result.status === "DITOLAK" && "Pengajuan Anda ditolak"}
-                    </p>
+            <CardContent>
+              <form onSubmit={handleSearch} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6 items-end">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Nomor Tiket</Label>
+                    <Input
+                      value={ticketNumber}
+                      onChange={(e) => setTicketNumber(e.target.value)}
+                      placeholder="Contoh: TKT-202601-XXXXXX"
+                      className="h-12 rounded-xl focus-visible:ring-primary"
+                    />
                   </div>
-                </div>
-              </div>
-
-              {/* Detail Pemohon */}
-              <div>
-                <h3 className="font-semibold mb-3">Data Pemohon</h3>
-                <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
-                  <div>
-                    <p className="text-sm text-gray-600">Nama</p>
-                    <p className="font-medium">{result.applicantName}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">NIK</p>
-                    <p className="font-medium">{result.applicantNik}</p>
-                  </div>
-                  {result.applicantPhone && (
-                    <div>
-                      <p className="text-sm text-gray-600">No. Telepon</p>
-                      <p className="font-medium">{result.applicantPhone}</p>
+                  <div className="relative space-y-2 hidden md:block">
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none -translate-x-3 translate-y-2">
+                      <span className="text-sm text-muted-foreground font-medium bg-card px-2">atau</span>
                     </div>
-                  )}
-                  <div>
-                    <p className="text-sm text-gray-600">Tanggal Pengajuan</p>
-                    <p className="font-medium">{formatDateTime(result.createdAt)}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">NIK Pemohon</Label>
+                    <Input
+                      value={nik}
+                      onChange={(e) => setNik(e.target.value)}
+                      placeholder="16 digit NIK"
+                      maxLength={16}
+                      className="h-12 rounded-xl focus-visible:ring-primary"
+                    />
                   </div>
                 </div>
-              </div>
 
-              {/* Data Permohonan */}
-              <div>
-                <h3 className="font-semibold mb-3">Data Permohonan</h3>
-                <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-                  {Object.entries(result.formData).map(([key, value]) => (
-                    <div key={key} className="flex justify-between border-b pb-2 last:border-0">
-                      <span className="text-gray-600 capitalize">
-                        {key.replace(/_/g, " ")}:
-                      </span>
-                      <span className="font-medium text-right">{String(value)}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Catatan Admin */}
-              {result.adminNotes && (
-                <div>
-                  <h3 className="font-semibold mb-3">Catatan dari Petugas</h3>
-                  <div className="bg-blue-50 border-l-4 border-blue-600 p-4 rounded">
-                    <p className="text-gray-800">{result.adminNotes}</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              <div className="flex gap-2 pt-4 border-t">
-                {result.status === "SELESAI" && (
-                  <Button className="flex-1">
-                    Download Surat
-                  </Button>
+                {error && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-900/50"
+                  >
+                    {error}
+                  </motion.div>
                 )}
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => {
-                    setResult(null)
-                    setTicketNumber("")
-                    setNik("")
-                  }}
-                >
-                  Cari Pengajuan Lain
-                </Button>
-              </div>
+                <div className="flex justify-end pt-2">
+                  <Button type="submit" className="h-12 rounded-xl px-8 w-full md:w-auto" disabled={loading}>
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Mencari...
+                      </>
+                    ) : (
+                      "Cari Pengajuan"
+                    )}
+                  </Button>
+                </div>
+              </form>
             </CardContent>
           </Card>
-        )}
+        </motion.div>
+
+        <AnimatePresence>
+          {result && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <Card className="shadow-lg border-border overflow-hidden">
+                <div className={`h-2 w-full ${
+                  result.status === "SELESAI" ? "bg-green-500" :
+                  result.status === "DITOLAK" ? "bg-red-500" :
+                  result.status === "DIPROSES" ? "bg-yellow-500" : "bg-blue-500"
+                }`}></div>
+                <CardHeader className="bg-muted/30">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                      <CardTitle className="text-2xl mb-1">
+                        {result.letterType.name}
+                      </CardTitle>
+                      <CardDescription className="text-base flex items-center gap-2">
+                        No. Tiket: <span className="font-mono font-bold text-foreground px-2 py-0.5 bg-muted rounded">{result.ticketNumber}</span>
+                      </CardDescription>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {getStatusIcon(result.status)}
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-8 pt-6">
+                  {/* Status Timeline */}
+                  <div
+                    className={`p-6 rounded-2xl border ${getStatusColor(result.status)}`}
+                  >
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                      <div>
+                        <p className="font-bold text-xl mb-1 flex items-center gap-2">
+                          Status Saat Ini: {result.status}
+                        </p>
+                        <p className="text-sm font-medium opacity-90">
+                          {result.status === "DIAJUKAN" &&
+                            "Pengajuan Anda telah diterima dan sedang menunggu antrean untuk diproses."}
+                          {result.status === "DIPROSES" &&
+                            "Dokumen Anda sedang diperiksa dan diproses oleh petugas desa."}
+                          {result.status === "SELESAI" &&
+                            "Pengajuan selesai! Dokumen Anda sudah siap diambil atau diunduh."}
+                          {result.status === "DITOLAK" && 
+                            "Mohon maaf, pengajuan Anda tidak dapat diproses. Silakan cek catatan petugas."}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-8">
+                    {/* Detail Pemohon */}
+                    <div>
+                      <h3 className="font-bold text-lg mb-4 flex items-center gap-2 border-b pb-2">
+                        Data Pemohon
+                      </h3>
+                      <div className="space-y-4 bg-muted/50 p-5 rounded-xl border border-border">
+                        <div>
+                          <p className="text-sm text-muted-foreground font-medium">Nama Lengkap</p>
+                          <p className="font-semibold text-foreground">{result.applicantName}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground font-medium">NIK</p>
+                          <p className="font-semibold text-foreground">{result.applicantNik}</p>
+                        </div>
+                        {result.applicantPhone && (
+                          <div>
+                            <p className="text-sm text-muted-foreground font-medium">No. Telepon</p>
+                            <p className="font-semibold text-foreground">{result.applicantPhone}</p>
+                          </div>
+                        )}
+                        <div>
+                          <p className="text-sm text-muted-foreground font-medium">Tanggal Pengajuan</p>
+                          <p className="font-semibold text-foreground">{formatDateTime(result.createdAt)}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Data Permohonan */}
+                    <div>
+                      <h3 className="font-bold text-lg mb-4 flex items-center gap-2 border-b pb-2">
+                        Detail Permohonan
+                      </h3>
+                      <div className="bg-muted/50 p-5 rounded-xl border border-border space-y-4">
+                        {Object.entries(result.formData).map(([key, value]) => (
+                          <div key={key} className="flex flex-col sm:flex-row sm:justify-between border-b border-border/50 pb-3 last:border-0 last:pb-0 gap-1">
+                            <span className="text-sm text-muted-foreground font-medium capitalize">
+                              {key.replace(/_/g, " ")}:
+                            </span>
+                            <span className="font-semibold text-foreground sm:text-right">{String(value)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Catatan Admin */}
+                  {result.adminNotes && (
+                    <div className="mt-4">
+                      <h3 className="font-bold text-lg mb-3">Catatan dari Petugas</h3>
+                      <div className="bg-blue-50 dark:bg-blue-950 border-l-4 border-blue-500 p-5 rounded-r-xl">
+                        <p className="text-blue-900 dark:text-blue-100 font-medium">{result.adminNotes}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-border">
+                    {result.status === "SELESAI" && (
+                      <Button className="flex-1 h-12 rounded-xl text-md">
+                        Download Surat Keterangan
+                      </Button>
+                    )}
+                    <Button
+                      variant="outline"
+                      className="flex-1 h-12 rounded-xl text-md"
+                      onClick={() => {
+                        setResult(null)
+                        setTicketNumber("")
+                        setNik("")
+                      }}
+                    >
+                      Cari Pengajuan Lain
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
     </div>
   )
