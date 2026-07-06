@@ -119,10 +119,13 @@ export async function GET() {
       })),
       totals: {
         residents: await db.resident.count(),
+        families: await db.resident.findMany({ select: { kk: true }, distinct: ["kk"] }).then(r => r.length),
         letters: await db.letterRequest.count(),
         pendingLetters: await db.letterRequest.count({
           where: { status: "DIAJUKAN" },
         }),
+        rtCount: await db.resident.findMany({ select: { rt: true }, distinct: ["rt"] }).then(r => r.length),
+        rwCount: await db.resident.findMany({ select: { rw: true }, distinct: ["rw"] }).then(r => r.length),
       },
     })
   } catch (error) {
