@@ -30,3 +30,54 @@ export async function GET(
     )
   }
 }
+
+export async function PUT(
+  request: NextRequest,
+  props: { params: Promise<{ slug: string }> }
+) {
+  try {
+    const params = await props.params;
+    const body = await request.json()
+    const { title, content, excerpt, author, category, slug } = body
+
+    const news = await db.news.update({
+      where: { slug: params.slug },
+      data: {
+        title,
+        content,
+        excerpt,
+        author,
+        category,
+        slug,
+      },
+    })
+
+    return NextResponse.json(news)
+  } catch (error) {
+    console.error("Error updating news:", error)
+    return NextResponse.json(
+      { error: "Failed to update news" },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  props: { params: Promise<{ slug: string }> }
+) {
+  try {
+    const params = await props.params;
+    await db.news.delete({
+      where: { slug: params.slug },
+    })
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error("Error deleting news:", error)
+    return NextResponse.json(
+      { error: "Failed to delete news" },
+      { status: 500 }
+    )
+  }
+}

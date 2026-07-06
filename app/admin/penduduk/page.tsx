@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { formatDate } from "@/lib/utils"
 import { Plus, Search, Edit, Trash2, Upload, Download } from "lucide-react"
+import { toast } from "sonner"
 
 interface Resident {
   id: string
@@ -100,13 +101,14 @@ export default function PendudukPage() {
         setIsAddOpen(false)
         fetchResidents()
         resetForm()
+        toast.success("Data berhasil ditambahkan")
       } else {
         const error = await res.json()
-        alert(error.error || "Gagal menambahkan data")
+        toast.error(error.error || "Gagal menambahkan data")
       }
     } catch (error) {
       console.error("Error adding resident:", error)
-      alert("Terjadi kesalahan")
+      toast.error("Terjadi kesalahan")
     }
   }
 
@@ -124,13 +126,14 @@ export default function PendudukPage() {
         setIsEditOpen(false)
         fetchResidents()
         resetForm()
+        toast.success("Data berhasil diupdate")
       } else {
         const error = await res.json()
-        alert(error.error || "Gagal mengupdate data")
+        toast.error(error.error || "Gagal mengupdate data")
       }
     } catch (error) {
       console.error("Error updating resident:", error)
-      alert("Terjadi kesalahan")
+      toast.error("Terjadi kesalahan")
     }
   }
 
@@ -146,12 +149,13 @@ export default function PendudukPage() {
         setIsDeleteOpen(false)
         fetchResidents()
         setSelectedResident(null)
+        toast.success("Data berhasil dihapus")
       } else {
-        alert("Gagal menghapus data")
+        toast.error("Gagal menghapus data")
       }
     } catch (error) {
       console.error("Error deleting resident:", error)
-      alert("Terjadi kesalahan")
+      toast.error("Terjadi kesalahan")
     }
   }
 
@@ -239,12 +243,12 @@ export default function PendudukPage() {
       })
 
       const result = await res.json()
-      alert(`Import selesai!\nBerhasil: ${result.success}\nGagal: ${result.failed}`)
+      toast.success(`Import selesai! Berhasil: ${result.success}, Gagal: ${result.failed}`)
       setIsImportOpen(false)
       fetchResidents()
     } catch (error) {
       console.error('Error importing:', error)
-      alert('Gagal import data')
+      toast.error('Gagal import data')
     }
   }
 

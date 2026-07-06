@@ -272,9 +272,16 @@ export default function CekStatusPage() {
                   {/* Action Buttons */}
                   <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-border">
                     {result.status === "SELESAI" && (
-                      <Button className="flex-1 h-12 rounded-xl text-md">
-                        Download Surat Keterangan
-                      </Button>
+                      <a 
+                        href={`/api/letters/generate-pdf?id=${result.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1"
+                      >
+                        <Button className="w-full h-12 rounded-xl text-md">
+                          Download Surat Keterangan
+                        </Button>
+                      </a>
                     )}
                     <Button
                       variant="outline"

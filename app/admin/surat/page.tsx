@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { formatDateTime } from "@/lib/utils"
 import { Search, Eye } from "lucide-react"
+import { toast } from "sonner"
 
 interface LetterRequest {
   id: string
@@ -91,13 +92,13 @@ export default function SuratPage() {
       if (res.ok) {
         setIsDetailOpen(false)
         fetchRequests()
-        alert("Status berhasil diupdate")
+        toast.success("Status berhasil diupdate")
       } else {
-        alert("Gagal update status")
+        toast.error("Gagal update status")
       }
     } catch (error) {
       console.error("Error updating status:", error)
-      alert("Terjadi kesalahan")
+      toast.error("Terjadi kesalahan")
     }
   }
 

@@ -19,32 +19,32 @@ import { motion } from "framer-motion"
 // ─── Placeholder gallery images (replace with real photos later) ────
 const GALLERY_ITEMS = [
   {
-    src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80",
+    src: "https://images.unsplash.com/photo-1592652431713-393f6630fbc8?w=800&q=80",
     title: "Pemandangan Persawahan Desa",
     category: "Alam",
   },
   {
-    src: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80",
+    src: "https://images.unsplash.com/photo-1577700204738-92750e5015da?w=800&q=80",
     title: "Gotong Royong Warga",
     category: "Kegiatan",
   },
   {
-    src: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&q=80",
+    src: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&q=80",
     title: "Musyawarah Desa",
     category: "Pemerintahan",
   },
   {
-    src: "https://images.unsplash.com/photo-1588075592405-d3d4f0846961?w=800&q=80",
+    src: "https://images.unsplash.com/photo-1553456558-aaf63dd753ce?w=800&q=80",
     title: "Produk UMKM Lokal",
     category: "Ekonomi",
   },
   {
-    src: "https://images.unsplash.com/photo-1593100126453-19b562a800c1?w=800&q=80",
-    title: "Kegiatan Posyandu",
+    src: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=80",
+    title: "Kesehatan Masyarakat",
     category: "Kesehatan",
   },
   {
-    src: "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=800&q=80",
+    src: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&q=80",
     title: "Pendidikan Anak Desa",
     category: "Pendidikan",
   },

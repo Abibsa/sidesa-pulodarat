@@ -30,9 +30,9 @@ export default function BeritaDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <PublicNav />
-        <div className="max-w-4xl mx-auto px-4 py-12 text-center">
+        <div className="max-w-4xl mx-auto px-4 py-12 text-center text-foreground">
           Memuat berita...
         </div>
       </div>
@@ -41,10 +41,10 @@ export default function BeritaDetailPage() {
 
   if (!news) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <PublicNav />
         <div className="max-w-4xl mx-auto px-4 py-12 text-center">
-          <h1 className="text-2xl font-bold mb-4">Berita tidak ditemukan</h1>
+          <h1 className="text-2xl font-bold mb-4 text-foreground">Berita tidak ditemukan</h1>
           <Link href="/berita">
             <Button>Kembali ke Berita</Button>
           </Link>
@@ -54,7 +54,7 @@ export default function BeritaDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <PublicNav />
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -65,16 +65,16 @@ export default function BeritaDetailPage() {
           </Button>
         </Link>
 
-        <article className="bg-white rounded-lg shadow-sm p-8">
+        <article className="bg-card rounded-lg shadow-sm border border-border p-8">
           <div className="mb-6">
-            <span className="text-xs bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
+            <span className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full">
               {news.category}
             </span>
           </div>
 
-          <h1 className="text-4xl font-bold mb-6">{news.title}</h1>
+          <h1 className="text-4xl font-bold mb-6 text-foreground">{news.title}</h1>
 
-          <div className="flex items-center gap-6 text-gray-600 mb-8 pb-8 border-b">
+          <div className="flex items-center gap-6 text-muted-foreground mb-8 pb-8 border-b border-border">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
               <span className="text-sm">{formatDate(news.publishedAt)}</span>
@@ -85,8 +85,8 @@ export default function BeritaDetailPage() {
             </div>
           </div>
 
-          <div className="prose prose-lg max-w-none">
-            <div className="text-gray-800 leading-relaxed whitespace-pre-line">
+          <div className="prose prose-lg dark:prose-invert max-w-none">
+            <div className="text-foreground/90 leading-relaxed whitespace-pre-line">
               {news.content}
             </div>
           </div>

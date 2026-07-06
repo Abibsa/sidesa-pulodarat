@@ -11,6 +11,7 @@ import { FileText, CheckCircle, Loader2, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import PublicNav from "@/components/PublicNav"
 import { motion } from "framer-motion"
+import { toast } from "sonner"
 
 interface LetterType {
   id: string
@@ -77,12 +78,13 @@ export default function AjukanSuratPage() {
         setApplicantData({ nik: "", name: "", phone: "", email: "" })
         setFormData({})
         setSelectedType(null)
+        toast.success("Pengajuan berhasil!")
       } else {
-        alert("Gagal mengajukan surat. Silakan coba lagi.")
+        toast.error("Gagal mengajukan surat. Silakan coba lagi.")
       }
     } catch (error) {
       console.error("Error submitting request:", error)
-      alert("Terjadi kesalahan. Silakan coba lagi.")
+      toast.error("Terjadi kesalahan. Silakan coba lagi.")
     } finally {
       setLoading(false)
     }

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { generateTicketNumber } from "@/lib/utils"
+import { z } from "zod"
+import { letterRequestSchema } from "@/lib/validations"
 
 export async function GET(request: NextRequest) {
   try {
@@ -57,7 +59,8 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { letterTypeId, applicantNik, applicantName, applicantPhone, applicantEmail, formData } = body
+    const validated = letterRequestSchema.parse(body)
+    const { letterTypeId, applicantNik, applicantName, applicantPhone, applicantEmail, formData } = validated
 
     // Generate ticket number
     const ticketNumber = generateTicketNumber()
@@ -70,7 +73,7 @@ export async function POST(request: NextRequest) {
         applicantName,
         applicantPhone,
         applicantEmail,
-        formData,
+        formData: formData as any,
         status: "DIAJUKAN",
       },
       include: {
@@ -80,6 +83,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(letterRequest, { status: 201 })
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: "Validation error", details: error.issues },
+        { status: 400 }
+      )
+    }
     console.error("Error creating letter request:", error)
     return NextResponse.json(
       { error: "Failed to create letter request" },

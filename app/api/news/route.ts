@@ -40,3 +40,38 @@ export async function GET(request: NextRequest) {
     )
   }
 }
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const { title, content, excerpt, author, category, slug } = body
+
+    if (!title || !content || !slug) {
+      return NextResponse.json(
+        { error: "Title, content, and slug are required" },
+        { status: 400 }
+      )
+    }
+
+    const news = await db.news.create({
+      data: {
+        title,
+        content,
+        excerpt,
+        author,
+        category,
+        slug,
+        isPublished: true,
+        publishedAt: new Date(),
+      },
+    })
+
+    return NextResponse.json(news, { status: 201 })
+  } catch (error) {
+    console.error("Error creating news:", error)
+    return NextResponse.json(
+      { error: "Failed to create news" },
+      { status: 500 }
+    )
+  }
+}
