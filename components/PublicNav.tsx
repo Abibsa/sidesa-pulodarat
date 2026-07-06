@@ -1,22 +1,16 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "./ui/button"
-import { Menu, X, Moon, Sun } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import { useTheme } from "next-themes"
+import ThemeToggle from "./ThemeToggle"
 
 export default function PublicNav() {
   const [isOpen, setIsOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
-  const { theme, setTheme } = useTheme()
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const navLinks = [
     { href: "/", label: "Beranda" },
@@ -26,9 +20,7 @@ export default function PublicNav() {
     { href: "/kontak", label: "Kontak" },
   ]
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
-  }
+
 
   return (
     <nav className="bg-background/80 backdrop-blur-md border-b border-border shadow-sm sticky top-0 z-50 transition-colors">
@@ -54,11 +46,7 @@ export default function PublicNav() {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            {mounted && (
-              <Button variant="ghost" size="icon" onClick={toggleTheme} className="mr-2">
-                {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              </Button>
-            )}
+            <ThemeToggle />
             <Link href="/surat">
               <Button className="rounded-xl shadow-md hover:shadow-lg transition-shadow">Ajukan Surat</Button>
             </Link>
@@ -69,11 +57,7 @@ export default function PublicNav() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
-            {mounted && (
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
-                {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              </Button>
-            )}
+            <ThemeToggle />
             <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)}>
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
