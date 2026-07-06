@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 
 // Public API routes that don't require authentication
 const publicApiRoutes = [
+  "/api/auth", // NextAuth routes MUST be public
   "/api/profile",
   "/api/statistics",
   "/api/news",

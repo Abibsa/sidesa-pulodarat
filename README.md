@@ -313,7 +313,7 @@ sidesa/
 │   └── 📄 test-connection.ts       # Script tes koneksi & fungsi
 │
 ├── 📄 auth.ts                       # NextAuth.js config
-├── 📄 proxy.ts                      # Dev proxy server
+├── 📄 middleware.ts                 # Next.js middleware (auth & proxy)
 ├── 📄 next.config.ts                # Next.js config
 ├── 📄 tsconfig.json                 # TypeScript config
 ├── 📄 .env.example                  # Template environment variables
