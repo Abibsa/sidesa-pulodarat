@@ -289,7 +289,7 @@ export default function HomePage() {
               [1, 2, 3, 4].map(i => (
                 <div key={i} className="h-48 rounded-2xl bg-muted animate-pulse" />
               ))
-            ) : stats && stats.totals && (
+            ) : stats && stats.totals ? (
               <>
                 <StatCard
                   icon={Users}
@@ -325,7 +325,7 @@ export default function HomePage() {
                   delay={0.3}
                 />
               </>
-            )}
+            ) : null}
           </div>
         </div>
       </section>
