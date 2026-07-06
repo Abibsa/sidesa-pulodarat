@@ -200,10 +200,10 @@ export default function HomePage() {
             </motion.div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight drop-shadow-lg">
-              {profile?.heroTitle || "Selamat Datang di SIDESA"}
+              {profile?.heroTitle || "Selamat Datang di Desa Pulodarat"}
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-blue-100 max-w-2xl mx-auto drop-shadow-md">
-              {profile?.heroSubtitle || "Sistem Informasi Desa - Platform digital terpadu untuk pelayanan administrasi dan informasi terkini"}
+              {profile?.heroSubtitle || "Sistem Informasi Desa - Platform digital terpadu untuk pelayanan administrasi dan informasi terkini Desa Pulodarat"}
             </p>
 
             <motion.div
@@ -289,7 +289,7 @@ export default function HomePage() {
               [1, 2, 3, 4].map(i => (
                 <div key={i} className="h-48 rounded-2xl bg-muted animate-pulse" />
               ))
-            ) : stats && (
+            ) : stats && stats.totals && (
               <>
                 <StatCard
                   icon={Users}
@@ -616,7 +616,7 @@ export default function HomePage() {
 
           {/* Bottom bar */}
           <div className="border-t border-slate-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-            <p>&copy; {new Date().getFullYear()} SIDESA - {profile?.villageName || "Desa Digital"}. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} SIDESA - {profile?.villageName || "Desa Pulodarat"}. All rights reserved.</p>
             <div className="flex gap-6">
               <Link href="/kebijakan-privasi" className="hover:text-white transition-colors">Kebijakan Privasi</Link>
               <Link href="/syarat-ketentuan" className="hover:text-white transition-colors">Syarat & Ketentuan</Link>
