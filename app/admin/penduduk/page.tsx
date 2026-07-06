@@ -257,7 +257,7 @@ export default function PendudukPage() {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-3xl font-bold">Data Penduduk</h2>
-          <p className="text-gray-600">Kelola data penduduk desa</p>
+          <p className="text-muted-foreground">Kelola data penduduk desa</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => setIsImportOpen(true)}>
@@ -298,20 +298,20 @@ export default function PendudukPage() {
             <>
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50 border-b">
+                  <thead className="bg-muted/50 dark:bg-muted/20 border-b">
                     <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">NIK</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">JK</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal Lahir</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">RT/RW</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pekerjaan</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">NIK</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Nama</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">JK</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Tanggal Lahir</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">RT/RW</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Pekerjaan</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Aksi</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200">
+                  <tbody className="divide-y divide-border">
                     {residents.map((resident) => (
-                      <tr key={resident.id} className="hover:bg-gray-50">
+                      <tr key={resident.id} className="hover:bg-muted/50 dark:hover:bg-muted/30">
                         <td className="px-4 py-3 text-sm">{resident.nik}</td>
                         <td className="px-4 py-3 text-sm font-medium">{resident.name}</td>
                         <td className="px-4 py-3 text-sm">{resident.gender === 'LAKI_LAKI' ? 'L' : 'P'}</td>
@@ -343,7 +343,7 @@ export default function PendudukPage() {
               </div>
 
               <div className="flex items-center justify-between mt-4">
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-muted-foreground">
                   Halaman {page} dari {totalPages}
                 </div>
                 <div className="flex gap-2">

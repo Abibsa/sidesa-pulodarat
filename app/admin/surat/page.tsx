@@ -109,7 +109,7 @@ export default function SuratPage() {
       SELESAI: "bg-green-100 text-green-800",
       DITOLAK: "bg-red-100 text-red-800",
     }
-    return badges[status] || "bg-gray-100 text-gray-800"
+    return badges[status] || "bg-muted text-foreground"
   }
 
   return (
@@ -117,7 +117,7 @@ export default function SuratPage() {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-3xl font-bold">Pengajuan Surat</h2>
-          <p className="text-gray-600">Kelola pengajuan surat dari warga</p>
+          <p className="text-muted-foreground">Kelola pengajuan surat dari warga</p>
         </div>
       </div>
 
@@ -160,34 +160,34 @@ export default function SuratPage() {
             <>
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50 border-b">
+                  <thead className="bg-muted/50 dark:bg-muted/20 border-b">
                     <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">
                         No. Tiket
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">
                         Jenis Surat
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">
                         Pemohon
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">
                         NIK
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">
                         Status
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">
                         Tanggal
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase">
                         Aksi
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200">
+                  <tbody className="divide-y divide-border">
                     {requests.map((request) => (
-                      <tr key={request.id} className="hover:bg-gray-50">
+                      <tr key={request.id} className="hover:bg-muted/50 dark:hover:bg-muted/30">
                         <td className="px-4 py-3 text-sm font-mono">
                           {request.ticketNumber}
                         </td>
@@ -205,7 +205,7 @@ export default function SuratPage() {
                             {request.status}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-600">
+                        <td className="px-4 py-3 text-sm text-muted-foreground">
                           {formatDateTime(request.createdAt)}
                         </td>
                         <td className="px-4 py-3 text-sm">
@@ -224,7 +224,7 @@ export default function SuratPage() {
               </div>
 
               <div className="flex items-center justify-between mt-4">
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-muted-foreground">
                   Halaman {page} dari {totalPages}
                 </div>
                 <div className="flex gap-2">
@@ -263,39 +263,39 @@ export default function SuratPage() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-gray-600">Jenis Surat</Label>
+                  <Label className="text-muted-foreground">Jenis Surat</Label>
                   <p className="font-medium">{selectedRequest.letterType.name}</p>
                 </div>
                 <div>
-                  <Label className="text-gray-600">Kode Surat</Label>
+                  <Label className="text-muted-foreground">Kode Surat</Label>
                   <p className="font-medium">{selectedRequest.letterType.code}</p>
                 </div>
                 <div>
-                  <Label className="text-gray-600">Nama Pemohon</Label>
+                  <Label className="text-muted-foreground">Nama Pemohon</Label>
                   <p className="font-medium">{selectedRequest.applicantName}</p>
                 </div>
                 <div>
-                  <Label className="text-gray-600">NIK</Label>
+                  <Label className="text-muted-foreground">NIK</Label>
                   <p className="font-medium">{selectedRequest.applicantNik}</p>
                 </div>
                 {selectedRequest.applicantPhone && (
                   <div>
-                    <Label className="text-gray-600">No. Telepon</Label>
+                    <Label className="text-muted-foreground">No. Telepon</Label>
                     <p className="font-medium">{selectedRequest.applicantPhone}</p>
                   </div>
                 )}
                 <div>
-                  <Label className="text-gray-600">Tanggal Pengajuan</Label>
+                  <Label className="text-muted-foreground">Tanggal Pengajuan</Label>
                   <p className="font-medium">{formatDateTime(selectedRequest.createdAt)}</p>
                 </div>
               </div>
 
               <div className="border-t pt-4">
-                <Label className="text-gray-600 mb-2 block">Data Form</Label>
-                <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                <Label className="text-muted-foreground mb-2 block">Data Form</Label>
+                <div className="bg-muted/50 dark:bg-muted/20 p-4 rounded-lg space-y-2">
                   {Object.entries(selectedRequest.formData).map(([key, value]) => (
                     <div key={key} className="flex justify-between">
-                      <span className="text-gray-600 capitalize">
+                      <span className="text-muted-foreground capitalize">
                         {key.replace(/_/g, " ")}:
                       </span>
                       <span className="font-medium">{String(value)}</span>

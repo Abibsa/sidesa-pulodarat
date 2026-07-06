@@ -49,7 +49,7 @@ export default function StatistikPage() {
     <div className="space-y-6">
       <div>
         <h2 className="text-3xl font-bold">Statistik Desa</h2>
-        <p className="text-gray-600">Visualisasi data penduduk dan pelayanan desa</p>
+        <p className="text-muted-foreground">Visualisasi data penduduk dan pelayanan desa</p>
       </div>
 
       {/* Summary Cards */}
@@ -62,7 +62,7 @@ export default function StatistikPage() {
             <div className="text-4xl font-bold text-blue-600">
               {stats.totals.residents}
             </div>
-            <p className="text-sm text-gray-600 mt-1">Jiwa terdaftar</p>
+            <p className="text-sm text-muted-foreground mt-1">Jiwa terdaftar</p>
           </CardContent>
         </Card>
         <Card>
@@ -73,7 +73,7 @@ export default function StatistikPage() {
             <div className="text-4xl font-bold text-green-600">
               {stats.totals.letters}
             </div>
-            <p className="text-sm text-gray-600 mt-1">Total pengajuan</p>
+            <p className="text-sm text-muted-foreground mt-1">Total pengajuan</p>
           </CardContent>
         </Card>
         <Card>
@@ -84,7 +84,7 @@ export default function StatistikPage() {
             <div className="text-4xl font-bold text-orange-600">
               {stats.totals.pendingLetters}
             </div>
-            <p className="text-sm text-gray-600 mt-1">Perlu ditindaklanjuti</p>
+            <p className="text-sm text-muted-foreground mt-1">Perlu ditindaklanjuti</p>
           </CardContent>
         </Card>
       </div>

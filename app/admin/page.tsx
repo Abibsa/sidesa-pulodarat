@@ -20,8 +20,8 @@ export default async function AdminDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold text-gray-900">Dashboard Admin</h2>
-        <p className="text-gray-600 mt-1">
+        <h2 className="text-3xl font-bold text-foreground">Dashboard Admin</h2>
+        <p className="text-muted-foreground mt-1">
           Selamat datang, {session?.user.name}
         </p>
       </div>
@@ -97,31 +97,31 @@ export default async function AdminDashboard() {
           <CardContent className="space-y-2">
             <Link 
               href="/admin/penduduk" 
-              className="block p-3 rounded-lg hover:bg-gray-50 border"
+              className="block p-3 rounded-lg hover:bg-muted/50 dark:hover:bg-muted/30 border"
             >
               <div className="font-medium">Data Penduduk</div>
-              <div className="text-sm text-gray-600">Kelola data penduduk desa</div>
+              <div className="text-sm text-muted-foreground">Kelola data penduduk desa</div>
             </Link>
             <Link 
               href="/admin/surat" 
-              className="block p-3 rounded-lg hover:bg-gray-50 border"
+              className="block p-3 rounded-lg hover:bg-muted/50 dark:hover:bg-muted/30 border"
             >
               <div className="font-medium">Pengajuan Surat</div>
-              <div className="text-sm text-gray-600">Proses pengajuan surat warga</div>
+              <div className="text-sm text-muted-foreground">Proses pengajuan surat warga</div>
             </Link>
             <Link 
               href="/admin/statistik" 
-              className="block p-3 rounded-lg hover:bg-gray-50 border"
+              className="block p-3 rounded-lg hover:bg-muted/50 dark:hover:bg-muted/30 border"
             >
               <div className="font-medium">Statistik</div>
-              <div className="text-sm text-gray-600">Lihat statistik dan grafik</div>
+              <div className="text-sm text-muted-foreground">Lihat statistik dan grafik</div>
             </Link>
             <Link 
               href="/admin/berita" 
-              className="block p-3 rounded-lg hover:bg-gray-50 border"
+              className="block p-3 rounded-lg hover:bg-muted/50 dark:hover:bg-muted/30 border"
             >
               <div className="font-medium">Berita</div>
-              <div className="text-sm text-gray-600">Kelola berita dan pengumuman</div>
+              <div className="text-sm text-muted-foreground">Kelola berita dan pengumuman</div>
             </Link>
           </CardContent>
         </Card>
@@ -133,19 +133,19 @@ export default async function AdminDashboard() {
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex justify-between items-center pb-2 border-b">
-              <span className="text-sm text-gray-600">Role Anda</span>
+              <span className="text-sm text-muted-foreground">Role Anda</span>
               <span className="text-sm font-medium">{session?.user.role}</span>
             </div>
             <div className="flex justify-between items-center pb-2 border-b">
-              <span className="text-sm text-gray-600">Email</span>
+              <span className="text-sm text-muted-foreground">Email</span>
               <span className="text-sm font-medium">{session?.user.email}</span>
             </div>
             <div className="flex justify-between items-center pb-2 border-b">
-              <span className="text-sm text-gray-600">Status Database</span>
+              <span className="text-sm text-muted-foreground">Status Database</span>
               <span className="text-sm font-medium text-green-600">● Connected</span>
             </div>
-            <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-              <p className="text-sm text-blue-800">
+            <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <p className="text-sm text-blue-800 dark:text-blue-200">
                 💡 Tip: Gunakan menu navigasi di atas untuk mengakses berbagai fitur admin.
               </p>
             </div>
