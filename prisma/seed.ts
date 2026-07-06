@@ -60,15 +60,15 @@ async function main() {
       kecamatan: 'Pecangaan',
       kabupaten: 'Kabupaten Jepara',
       provinsi: 'Jawa Tengah',
-      history: 'Desa Pulodarat merupakan salah satu desa di Kecamatan Pecangaan, Kabupaten Jepara, Provinsi Jawa Tengah. Letaknya cukup strategis karena berada di kawasan pusat aktivitas Kecamatan Pecangaan. Desa ini berkembang sebagai kawasan permukiman, perdagangan, jasa, serta industri kecil dan mebel yang menjadi salah satu sektor ekonomi masyarakat. Selain itu, desa memiliki beberapa fasilitas pendidikan, tempat ibadah, dan pelayanan pemerintahan yang mendukung aktivitas masyarakat.',
+      history: 'Desa Pulodarat merupakan salah satu desa di Kecamatan Pecangaan, Kabupaten Jepara, Provinsi Jawa Tengah. Desa ini memiliki letak yang strategis di jalur penghubung wilayah Pecangaan dan berkembang sebagai kawasan permukiman, perdagangan, serta industri mebel dan UMKM. Pemerintah desa terus berupaya meningkatkan kualitas pelayanan publik melalui pembangunan dan digitalisasi pelayanan kepada masyarakat.',
       vision: '[Belum dipublikasikan secara resmi]',
       mission: '[Belum dipublikasikan secara resmi]',
       address: 'Jl. Lingkar Pecangaan, RW 02, Desa Pulodarat, Kecamatan Pecangaan, Kabupaten Jepara, Jawa Tengah 59462. Balai Desa Pulodarat',
       phone: '[Belum dipublikasikan]',
       email: '[Belum dipublikasikan]',
       officeHours: 'Senin - Sabtu, 08:00 - 16:00 WIB',
-      heroTitle: 'Selamat Datang di Desa Pulodarat',
-      heroSubtitle: 'Desa Mandiri, Sejahtera, dan Berbudaya',
+      heroTitle: 'Selamat Datang di Website Resmi Desa Pulodarat',
+      heroSubtitle: 'Transparan • Informatif • Melayani',
       chiefName: 'Akhmad Burnadi',
       chiefGreeting: 'Assalamu\'alaikum warahmatullahi wabarakatuh. Selamat datang di website resmi Desa Pulodarat. Kami berkomitmen untuk memberikan pelayanan publik yang berkualitas demi kesejahteraan warga.'
     }
@@ -359,22 +359,22 @@ async function main() {
   await prisma.villagePotential.createMany({
     data: [
       {
-        title: 'Sektor Pertanian Padi dan Palawija',
-        category: 'Pertanian',
-        description: 'Sektor pertanian merupakan salah satu mata pencaharian pokok warga Desa Pulodarat, dengan komoditas unggulan berupa padi dan palawija yang menyokong ketahanan pangan desa.',
-        contactInfo: 'Kelompok Tani Desa Pulodarat'
-      },
-      {
-        title: 'Industri Rumahan: Konveksi & Mebel',
+        title: 'Industri Furniture dan Mebel Jepara',
         category: 'UMKM',
-        description: 'Sesuai dengan ciri khas wilayah Jepara, sebagian masyarakat bergerak di bidang ukir kayu (mebel) dan industri konveksi (pakaian) rumahan dengan kualitas yang sangat kompetitif.',
+        description: 'Sebagian masyarakat bekerja pada industri furniture, ukiran, dan mebel yang menjadi salah satu sektor ekonomi unggulan Kabupaten Jepara.',
         contactInfo: 'Paguyuban Pengrajin Pulodarat'
       },
       {
-        title: 'Aneka UMKM Kuliner & Kerajinan Lokal',
+        title: 'UMKM',
         category: 'UMKM',
-        description: 'Beragam aneka jajanan pasar dan kerajinan tangan rumahan yang terus tumbuh menjadi penggerak ekonomi skala kecil di wilayah Pulodarat.',
+        description: 'Masyarakat mengembangkan berbagai usaha mikro seperti perdagangan, kuliner, jasa, serta industri rumah tangga yang menopang perekonomian desa.',
         contactInfo: 'Pusat Oleh-Oleh Pulodarat'
+      },
+      {
+        title: 'Perdagangan dan Jasa',
+        category: 'Perdagangan',
+        description: 'Lokasi desa yang berada di kawasan Kecamatan Pecangaan menjadikan aktivitas perdagangan dan jasa berkembang cukup pesat.',
+        contactInfo: 'BUMDes Pulodarat'
       }
     ],
     skipDuplicates: true
