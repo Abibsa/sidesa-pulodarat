@@ -60,16 +60,16 @@ async function main() {
       kecamatan: 'Pecangaan',
       kabupaten: 'Kabupaten Jepara',
       provinsi: 'Jawa Tengah',
-      history: 'Desa Pulodarat adalah salah satu desa di Kecamatan Pecangaan yang masyarakatnya hidup rukun dengan memadukan tradisi budaya Jepara yang kental dan semangat gotong royong.',
-      vision: 'Terwujudnya Desa Pulodarat yang Mandiri, Sejahtera, dan Berbudaya melalui Tata Kelola Pemerintahan yang Baik.',
-      mission: '1. Meningkatkan kualitas pelayanan publik bagi masyarakat.\n2. Mengembangkan potensi ekonomi lokal, khususnya di sektor pertanian dan industri rumahan.\n3. Meningkatkan pembangunan infrastruktur desa yang merata.',
-      address: 'Kantor Petinggi Desa Pulodarat, Kec. Pecangaan, Kabupaten Jepara, Jawa Tengah, Kode Pos 59462',
-      phone: '[Nomor Petinggi/Admin]',
-      email: 'pemdes.pulodarat@jepara.go.id',
-      officeHours: 'Senin - Jumat, 08:00 - 15:00 WIB',
+      history: 'Desa Pulodarat merupakan salah satu desa di Kecamatan Pecangaan, Kabupaten Jepara, Provinsi Jawa Tengah. Letaknya cukup strategis karena berada di kawasan pusat aktivitas Kecamatan Pecangaan. Desa ini berkembang sebagai kawasan permukiman, perdagangan, jasa, serta industri kecil dan mebel yang menjadi salah satu sektor ekonomi masyarakat. Selain itu, desa memiliki beberapa fasilitas pendidikan, tempat ibadah, dan pelayanan pemerintahan yang mendukung aktivitas masyarakat.',
+      vision: '[Belum dipublikasikan secara resmi]',
+      mission: '[Belum dipublikasikan secara resmi]',
+      address: 'Jl. Lingkar Pecangaan, RW 02, Desa Pulodarat, Kecamatan Pecangaan, Kabupaten Jepara, Jawa Tengah 59462. Balai Desa Pulodarat',
+      phone: '[Belum dipublikasikan]',
+      email: '[Belum dipublikasikan]',
+      officeHours: 'Senin - Sabtu, 08:00 - 16:00 WIB',
       heroTitle: 'Selamat Datang di Desa Pulodarat',
       heroSubtitle: 'Desa Mandiri, Sejahtera, dan Berbudaya',
-      chiefName: '[Nama Lengkap Petinggi Pulodarat]',
+      chiefName: 'Akhmad Burnadi',
       chiefGreeting: 'Assalamu\'alaikum warahmatullahi wabarakatuh. Selamat datang di website resmi Desa Pulodarat. Kami berkomitmen untuk memberikan pelayanan publik yang berkualitas demi kesejahteraan warga.'
     }
   })
@@ -80,7 +80,7 @@ async function main() {
   console.log('👥 Membuat struktur organisasi...')
   await prisma.villageOfficer.createMany({
     data: [
-      { name: '[Nama Lengkap Petinggi Pulodarat]', position: 'Kepala Desa (Petinggi)', order: 1 },
+      { name: 'Akhmad Burnadi', position: 'Kepala Desa (Petinggi)', order: 1 },
       { name: '[Nama Lengkap Carik]', position: 'Sekretaris Desa (Carik)', order: 2 },
       { name: '[Nama Kaur Keuangan]', position: 'Kaur Keuangan', order: 3 },
       { name: '[Nama Kaur Umum]', position: 'Kaur Umum', order: 4 },
