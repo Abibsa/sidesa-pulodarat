@@ -2,6 +2,7 @@ import { PrismaClient, UserRole, Gender, MaritalStatus } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
 import { hash } from 'bcryptjs'
+import 'dotenv/config'
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } })
 const adapter = new PrismaPg(pool)
@@ -9,52 +10,51 @@ const prisma = new PrismaClient({ adapter })
 
 async function main() {
   console.log('🌱 Mulai seeding database...')
+  await prisma.$connect()
+  
+  console.log('🔄 Menghangatkan koneksi database...')
+  await prisma.user.count().catch(() => 0)
+  await new Promise(resolve => setTimeout(resolve, 2000))
 
   // 1. Create Users
   console.log('👤 Membuat user admin...')
   const hashedPassword = await hash('admin123', 10)
   
-  const superadmin = await prisma.user.upsert({
-    where: { email: 'superadmin@desa.id' },
-    update: {},
-    create: {
-      email: 'superadmin@desa.id',
-      name: 'Super Admin',
-      password: hashedPassword,
-      role: UserRole.SUPERADMIN
-    }
+  await prisma.user.deleteMany({
+    where: { email: { in: ['superadmin@desa.id', 'operator@desa.id', 'kepala@desa.id'] } }
   })
-
-  const operator = await prisma.user.upsert({
-    where: { email: 'operator@desa.id' },
-    update: {},
-    create: {
-      email: 'operator@desa.id',
-      name: 'Operator Desa',
-      password: hashedPassword,
-      role: UserRole.OPERATOR
-    }
-  })
-
-  const kepalaDesa = await prisma.user.upsert({
-    where: { email: 'kepala@desa.id' },
-    update: {},
-    create: {
-      email: 'kepala@desa.id',
-      name: 'Kepala Desa',
-      password: hashedPassword,
-      role: UserRole.KEPALA_DESA
-    }
+  
+  await prisma.user.createMany({
+    data: [
+      {
+        email: 'superadmin@desa.id',
+        name: 'Super Admin',
+        password: hashedPassword,
+        role: UserRole.SUPERADMIN
+      },
+      {
+        email: 'operator@desa.id',
+        name: 'Operator Desa',
+        password: hashedPassword,
+        role: UserRole.OPERATOR
+      },
+      {
+        email: 'kepala@desa.id',
+        name: 'Kepala Desa',
+        password: hashedPassword,
+        role: UserRole.KEPALA_DESA
+      }
+    ],
+    skipDuplicates: true
   })
 
   console.log('✅ User berhasil dibuat')
 
   // 2. Create Village Profile
   console.log('🏘️  Membuat profil desa...')
-  await prisma.villageProfile.upsert({
-    where: { id: 'default' },
-    update: {},
-    create: {
+  await prisma.villageProfile.deleteMany({})
+  await prisma.villageProfile.create({
+    data: {
       id: 'default',
       villageName: 'Desa Pulodarat',
       kecamatan: 'Pecangaan',
