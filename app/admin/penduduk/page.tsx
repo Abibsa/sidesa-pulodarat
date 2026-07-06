@@ -208,7 +208,7 @@ export default function PendudukPage() {
 
   const downloadTemplate = () => {
     const csv = `nik,kk,name,gender,birthDate,birthPlace,address,rt,rw,kelurahan,kecamatan,religion,maritalStatus,occupation,education
-3301010101010001,3301011234567890,Contoh Nama,LAKI_LAKI,1990-01-01,Jakarta,Jl. Contoh No. 1,001,001,Desa PULODARAT,Kecamatan Sentral,Islam,KAWIN,Wiraswasta,SMA/Sederajat`
+'3301010101010001,'3301011234567890,Contoh Nama,LAKI_LAKI,1990-01-01,Jakarta,Jl. Contoh No. 1,'001,'001,Desa PULODARAT,Kecamatan Sentral,Islam,KAWIN,Wiraswasta,SMA/Sederajat`
     
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = window.URL.createObjectURL(blob)
@@ -230,7 +230,10 @@ export default function PendudukPage() {
       const values = line.split(',')
       const obj: any = {}
       headers.forEach((header, i) => {
-        obj[header.trim()] = values[i]?.trim()
+        let val = values[i]?.trim() || "";
+        // Strip leading single quote used to prevent Excel auto-formatting
+        if (val.startsWith("'")) val = val.substring(1);
+        obj[header.trim()] = val;
       })
       return obj
     })
